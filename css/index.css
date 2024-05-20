@@ -1,0 +1,13 @@
+
+
+
+.carousel-item {
+    margin-top: 20px;
+    height: 450px
+}
+
+.carousel-item img{
+    width: 100%; /* Ensure image fills its container */
+    height: 100%; /* Ensure image fills its container */
+    object-fit: cover; 
+}
