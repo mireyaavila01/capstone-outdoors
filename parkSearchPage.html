@@ -50,28 +50,55 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col">
+                    <h5>How would you like to search through the parks ?</h5>
                     <select id="searchTypeOptions" name="searchOptions" class="form-select" style="max-width: 500px;">
-                        <option>Select how would you like to search through the parks</option>
+                        <option>Select One</option>
                         <option value="by_location">By Location</option>
                         <option value="by_parkType">By Park Type </option>
                     </select>
                 </div>
 
-                <div id="listDropdown" class="col" style="visibility: hidden;">
-                    <select id="locationOrParkType" name="options" class="form-select" style="max-width: 500px; ">
-                       
-                    </select>
+
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <div id="listDropdown"  style="display: none;">
+                        <h5>Please Select One</h5>
+                        <select id="locationOrParkType" name="options" class="form-select" style="max-width: 500px; ">
+
+                        </select>
+                    </div>
                 </div>
+            </div>
 
+            <div class="row mt-4">
+                <div class="col">
+                    <div id="matchingOptionsDropdown"  style="display: none;">
+                        <h5>Select one to learn more about it !</h5>
+                        <select id="matchingParks" name="parks" class="form-select" style="max-width: 500px; ">
 
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col">
+                    <div id="matchingParkTypeDropdown"  style="display: none;">
+                        <h5>Select one to learn more about it !</h5>
+                        <select id="matchingParksByType" name="parks" class="form-select" style="max-width: 500px; ">
+
+                        </select>
+                    </div>
+                </div>
             </div>
 
 
         </div>
 
-       
+
 
     </main>
 
