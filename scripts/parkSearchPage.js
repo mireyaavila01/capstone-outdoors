@@ -6,48 +6,45 @@ const locationOrParkType = document.getElementById("locationOrParkType");
 const matchingOptionsDropdown = document.getElementById("matchingOptionsDropdown");
 const matchingParks = document.getElementById("matchingParks");
 
-const matchingParkTypeDropdown = document.getElementById("matchingParkTypeDropdown");
-const matchingParksByType = document.getElementById("matchingParksByType");
-
 
 window.onload = () => {
     
 searchTypeOptions.onchange = onSearchTypeDropdown;
-locationOrParkType.onchange = populateMatchingDropdowns;
-   
+locationOrParkType.onchange = getMatchingOptionsDropdown;
+
 };
 
 function onSearchTypeDropdown(){
-let selectedSearchType = searchTypeOptions.value;
+   clearResults(matchingParks);
 
+let selectedSearchType = searchTypeOptions.value;
 
 if (selectedSearchType == "by_location"){
     listDropdown.style.display = "block"
     matchingOptionsDropdown.style.display = "block"
-    matchingParkTypeDropdown.style.display = "none"
     populateDropdown(locationsArray);
  
 }
 else if (selectedSearchType == "by_parkType"){
     listDropdown.style.display = "block"
-    matchingParkTypeDropdown.style.display = "block"
-    matchingOptionsDropdown.style.display = "none"
+    matchingOptionsDropdown.style.display = "block"
     populateDropdown(parkTypesArray);
    
 }
 else {
     listDropdown.style.display = "none"
     matchingOptionsDropdown.style.display = "none"
-    matchingParkTypeDropdown.style.display = "none"
+   
 }
 
-    
 }
 
 
 function populateDropdown(optionsArray){
-    locationOrParkType.innerHTML = "";  //to clear previous options
+    clearResults(locationOrParkType);  //to clear previous options
+
     console.log(locationOrParkType);
+
     let newOption = document.createElement("option");
     newOption.textContent = "View Options";
     newOption.value = "";
@@ -64,69 +61,128 @@ function populateDropdown(optionsArray){
 
 }
 
-function populateMatchingStateDropdown(){
-    let selectedState = locationOrParkType.value.trim();
-    matchingParks.innerHTML = "";  //to clear previous options
-    
-    let parksInState = findParksByState(selectedState);
+function getMatchingOptionsDropdown(){
+    clearResults(matchingParks);
+   
+     let selectedValue = locationOrParkType.value.trim();
+     
+    let searchType;
+
+    if(searchTypeOptions.value === "by_location"){
+        searchType = "state";
+    }
+    else if (searchTypeOptions.value === "by_parkType"){
+        searchType = "type";
+    }
+    else{
+        console.log("Invaid search type");
+        return;
+    }
+    let parksSelected = findParks(selectedValue, searchType);
+    addOptionsToDropdown(parksSelected , matchingParks);
+}
+
+function addOptionsToDropdown(parks , dropdown){
+
+    clearResults(dropdown);
 
     let newOption = document.createElement("option");
     newOption.textContent = "View Options";
     newOption.value = "";
-    matchingParks.appendChild(newOption);
+    dropdown.appendChild(newOption);
 
-    for(let i = 0; i < parksInState.length; i++){
-        let park = parksInState[i];
+    for(let i = 0; i < parks.length; i++){
+        let park = parks[i];
         let newOption = document.createElement("option");
         newOption.value = park.LocationID;
         newOption.textContent = park.LocationName;
-        matchingParks.appendChild(newOption); 
-        //populates the dropdown with the matching results from function findParksByState
-
+        dropdown.appendChild(newOption);
     }
-    
 }
 
-function findParksByState(state){
-    state = state.trim().toLowerCase(); //Coverts to lowercase
-    return nationalParksArray.filter(park => park.State.trim().toLowerCase() === state);
-    //compares the state in lowercase to the states listed in the array to find matching ones 
+function findParks(optionSelected, searchType){
+
+    optionSelected = optionSelected.trim().toLowerCase();
+
+    if(searchType === "type"){
+        return nationalParksArray.filter(park => {
+            let parkType = park.LocationName.toLowerCase();
+            return parkType.indexOf(optionSelected) != -1;
+        });
+            
+        
+    }
+    else if(searchType === "state"){
+        return nationalParksArray.filter(park => {
+          let parkState = park.State.trim().toLowerCase();
+          return parkState === optionSelected; 
+        });
+        
+    }
+    else{
+        console.log("Invalid search type:", searchType);
+        return [];
+    }
+
 }
 
-function populateMatchingParkTypeDropdown(){
-    let selectedType = locationOrParkType.value.trim();
-
-    matchingParksByType.innerHTML = ""; 
-
-    console.log("Selected Park Type:", selectedType); 
-
-    let parksByType = findParksByType(selectedType);
+function clearResults(dropdown){
+    dropdown.innerHTML = "";
 
     let newOption = document.createElement("option");
     newOption.textContent = "View Options";
     newOption.value = "";
-    matchingParksByType.appendChild(newOption);
-
-    for(let i = 0; i < parksByType.length; i++){
-        let parkFound = parksByType[i];
-        let newOption = document.createElement("option");
-        newOption.value = parkFound.LocationID;
-        newOption.textContent = parkFound.LocationName;
-       matchingParksByType.appendChild(newOption); 
-    }
-
+    dropdown.appendChild(newOption);
 }
 
-function findParksByType(parkType){
-    parkType = parkType.trim().toLowerCase();
-    return nationalParksArray.filter(park => {
-    let parkNameLowerCase = park.LocationName.toLowerCase();
+function parkInfoCard(park){
+    let parkColumnDiv = document.createElement("div");
+    parkColumnDiv.className = "col order-md-last";
 
-    return parkNameLowerCase.indexOf(parkType) != -1;
-    });
-}
+    let parkHeadedTag1 = document.createElement("h4");
+    parkHeadedTag1.innerHTML = "Park Details";
+    parkColumnDiv.appendChild = (parkHeadedTag1);
 
-function populateMatchingDropdowns(){
-    populateMatchingParkTypeDropdown();
-    populateMatchingStateDropdown();
+    let parkCardDiv = document.createElement("div");
+    parkCardDiv.className = "card-parkInfo";
+    parkColumnDiv.appendChild(parkCardDiv);
+
+    let cardBodyDiv = document.createElement("div");
+    cardBodyDiv.className = "card-body";
+    parkCardDiv.appendChild(cardBodyDiv);
+
+    let bodyTitle = document.createElement("h5")
+    bodyTitle.className = "card-title";
+    bodyTitle.innerHTML = park.LocationName;
+    cardBodyDiv.appendChild(bodyTitle);
+
+    let bodySubtitle = document.createElement("h6");
+    bodySubtitle.className = "card-subtitle mb-2 text-body-secondary";
+    bodySubtitle.innerHTML = park.LocationID;
+    cardBodyDiv.appendChild(bodySubtitle);
+
+    let paraAddress = document.createElement("p");
+    paraAddress.className = "card-text";
+    paraAddress.innerHTML = `Address: ${park.Address}, ${park.City}, ${park.State}, ${park.ZipCode || "N/A"}`;
+    cardBodyDiv.appendChild(paraAddress);
+
+    let paraPhone = document.createElement("p");
+    paraPhone.className ="card-text";
+    paraPhone.innerHTML ="Phone Number: " + (park.Phone || "N/A");
+    cardBodyDiv.appendChild(paraPhone);
+
+    let paraFax = document.createElement("p");
+    paraFax.className = "card-text";
+    paraFax.innerHTML = "Fax Number: " + (park.Fax || "N/A");
+    cardBodyDiv.appendChild(paraFax);
+
+    let vistLink = document.createElement("a");
+    vistLink.href = park.Visit || "N/A"
+    vistLink.className = "card-link";
+    vistLink.innerHTML = "Visit Website " + parkColumnDiv.Visit;
+    cardBodyDiv.appendChild(vistLink);
+
+
+
+
 }
