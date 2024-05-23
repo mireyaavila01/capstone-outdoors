@@ -6,16 +6,20 @@ const locationOrParkType = document.getElementById("locationOrParkType");
 const matchingOptionsDropdown = document.getElementById("matchingOptionsDropdown");
 const matchingParks = document.getElementById("matchingParks");
 
+const parkCardRow = document.getElementById("parkCardRow");
+
 
 window.onload = () => {
     
 searchTypeOptions.onchange = onSearchTypeDropdown;
 locationOrParkType.onchange = getMatchingOptionsDropdown;
+matchingParks.onchange = showSelectedPark;
 
 };
 
 function onSearchTypeDropdown(){
    clearResults(matchingParks);
+   parkCardRow.innerHTML = "" ;
 
 let selectedSearchType = searchTypeOptions.value;
 
@@ -41,14 +45,8 @@ else {
 
 
 function populateDropdown(optionsArray){
-    clearResults(locationOrParkType);  //to clear previous options
-
-    console.log(locationOrParkType);
-
-    let newOption = document.createElement("option");
-    newOption.textContent = "View Options";
-    newOption.value = "";
-    locationOrParkType.appendChild(newOption);
+    clearResults(locationOrParkType);  
+    
 
     for (let i = 0; i < optionsArray.length; i++) {
         let option = optionsArray[i];
@@ -58,11 +56,11 @@ function populateDropdown(optionsArray){
         locationOrParkType.appendChild(newOption);
     }
 
-
 }
 
 function getMatchingOptionsDropdown(){
     clearResults(matchingParks);
+    parkCardRow.innerHTML = "" ;
    
      let selectedValue = locationOrParkType.value.trim();
      
@@ -80,16 +78,12 @@ function getMatchingOptionsDropdown(){
     }
     let parksSelected = findParks(selectedValue, searchType);
     addOptionsToDropdown(parksSelected , matchingParks);
+   
 }
 
 function addOptionsToDropdown(parks , dropdown){
 
     clearResults(dropdown);
-
-    let newOption = document.createElement("option");
-    newOption.textContent = "View Options";
-    newOption.value = "";
-    dropdown.appendChild(newOption);
 
     for(let i = 0; i < parks.length; i++){
         let park = parks[i];
@@ -110,7 +104,6 @@ function findParks(optionSelected, searchType){
             return parkType.indexOf(optionSelected) != -1;
         });
             
-        
     }
     else if(searchType === "state"){
         return nationalParksArray.filter(park => {
@@ -134,17 +127,39 @@ function clearResults(dropdown){
     newOption.value = "";
     dropdown.appendChild(newOption);
 }
+function showSelectedPark(){
+    
+    let selectedParkValue = matchingParks.value.trim().toLowerCase();
 
+
+    let selectedPark = nationalParksArray.find(park => park.LocationID.trim().toLowerCase() === selectedParkValue);
+
+
+
+    if(selectedPark){
+        parkCardRow.innerHTML = "";
+        let parkCard = parkInfoCard(selectedPark);
+        parkCardRow.appendChild(parkCard);
+   
+    }
+    else{
+        console.log("No Matching Park");
+       
+    }
+    
+}
 function parkInfoCard(park){
+    
+
     let parkColumnDiv = document.createElement("div");
     parkColumnDiv.className = "col order-md-last";
 
     let parkHeadedTag1 = document.createElement("h4");
     parkHeadedTag1.innerHTML = "Park Details";
-    parkColumnDiv.appendChild = (parkHeadedTag1);
+    parkColumnDiv.appendChild(parkHeadedTag1);
 
     let parkCardDiv = document.createElement("div");
-    parkCardDiv.className = "card-parkInfo";
+    parkCardDiv.className = "card";
     parkColumnDiv.appendChild(parkCardDiv);
 
     let cardBodyDiv = document.createElement("div");
@@ -158,13 +173,18 @@ function parkInfoCard(park){
 
     let bodySubtitle = document.createElement("h6");
     bodySubtitle.className = "card-subtitle mb-2 text-body-secondary";
-    bodySubtitle.innerHTML = park.LocationID;
+    bodySubtitle.innerHTML = "LocationID: " + park.LocationID;
     cardBodyDiv.appendChild(bodySubtitle);
 
     let paraAddress = document.createElement("p");
     paraAddress.className = "card-text";
-    paraAddress.innerHTML = `Address: ${park.Address}, ${park.City}, ${park.State}, ${park.ZipCode || "N/A"}`;
+    paraAddress.innerHTML = "Address:" + (park.Address || "N/A");
     cardBodyDiv.appendChild(paraAddress);
+
+    let paraCityStateZip = document.createElement("p")
+    paraCityStateZip.className = "card-text";
+    paraCityStateZip.innerHTML = `City:  ${park.City}<br> State:  ${park.State} <br> Zip:  ${park.ZipCode}`;
+    cardBodyDiv.appendChild(paraCityStateZip);
 
     let paraPhone = document.createElement("p");
     paraPhone.className ="card-text";
@@ -176,13 +196,17 @@ function parkInfoCard(park){
     paraFax.innerHTML = "Fax Number: " + (park.Fax || "N/A");
     cardBodyDiv.appendChild(paraFax);
 
-    let vistLink = document.createElement("a");
-    vistLink.href = park.Visit || "N/A"
-    vistLink.className = "card-link";
-    vistLink.innerHTML = "Visit Website " + parkColumnDiv.Visit;
-    cardBodyDiv.appendChild(vistLink);
-
-
-
+    if(park.Visit){
+    let visitLink = document.createElement("a");
+    visitLink.href = park.Visit;
+    visitLink.className = "btn btn-primary";
+    visitLink.innerHTML = "Visit Website" ;
+    visitLink.target = "_blank";
+    cardBodyDiv.appendChild(visitLink); 
+    }
+    
+    
+    return parkColumnDiv;
 
 }
+
