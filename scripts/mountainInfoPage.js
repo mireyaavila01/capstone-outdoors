@@ -15,7 +15,6 @@ hideOrShowCard(false);
 }
 
 function addMountainDropdown(){
-    console.log("window loaded");
 
     mountainOptions.innerHTML = "";
 
@@ -55,8 +54,6 @@ function getSelectedMountain(){
 
 // create a card to display the value's info
 function createMountainCard(mountain){
-
-    console.log("test");
 
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body";

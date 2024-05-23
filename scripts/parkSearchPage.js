@@ -18,20 +18,26 @@ matchingParks.onchange = showSelectedPark;
 };
 
 function onSearchTypeDropdown(){
+// clears exsisting results and park card
    clearResults(matchingParks);
    parkCardRow.innerHTML = "" ;
 
+//Gets the selected search type from the searchTypeOptions dropdown
 let selectedSearchType = searchTypeOptions.value;
 
+//If the user chooses to search by location
 if (selectedSearchType == "by_location"){
     listDropdown.style.display = "block"
     matchingOptionsDropdown.style.display = "block"
+    //calls the fuction with the argument of locationsArray to create new dropdown
     populateDropdown(locationsArray);
  
 }
+//If the user chooses to search by park type
 else if (selectedSearchType == "by_parkType"){
     listDropdown.style.display = "block"
     matchingOptionsDropdown.style.display = "block"
+    //calls the fuction with the argument of parkTypesArray to create new dropdown
     populateDropdown(parkTypesArray);
    
 }
@@ -59,13 +65,16 @@ function populateDropdown(optionsArray){
 }
 
 function getMatchingOptionsDropdown(){
+    // clears exsisting results and park card
     clearResults(matchingParks);
     parkCardRow.innerHTML = "" ;
    
+    //gets the selected value from the location or park type dropdown
      let selectedValue = locationOrParkType.value.trim();
      
     let searchType;
 
+    //Uses if statement with a condition to determine the search type
     if(searchTypeOptions.value === "by_location"){
         searchType = "state";
     }
@@ -76,7 +85,11 @@ function getMatchingOptionsDropdown(){
         console.log("Invaid search type");
         return;
     }
+
+    //get results from the findParks function with two agruments 
     let parksSelected = findParks(selectedValue, searchType);
+
+    //calls the function with the results and adds it to the dropdwown
     addOptionsToDropdown(parksSelected , matchingParks);
    
 }
@@ -152,7 +165,7 @@ function parkInfoCard(park){
     
 
     let parkColumnDiv = document.createElement("div");
-    parkColumnDiv.className = "col order-md-last";
+    parkColumnDiv.className = "col-md-6 offset-md-6";
 
     let parkHeadedTag1 = document.createElement("h4");
     parkHeadedTag1.innerHTML = "Park Details";
@@ -178,7 +191,7 @@ function parkInfoCard(park){
 
     let paraAddress = document.createElement("p");
     paraAddress.className = "card-text";
-    paraAddress.innerHTML = "Address:" + (park.Address || "N/A");
+    paraAddress.innerHTML = "Address: " + (park.Address || "N/A");
     cardBodyDiv.appendChild(paraAddress);
 
     let paraCityStateZip = document.createElement("p")
@@ -199,7 +212,7 @@ function parkInfoCard(park){
     if(park.Visit){
     let visitLink = document.createElement("a");
     visitLink.href = park.Visit;
-    visitLink.className = "btn btn-primary";
+    visitLink.className = "btn btn-olive-green";
     visitLink.innerHTML = "Visit Website" ;
     visitLink.target = "_blank";
     cardBodyDiv.appendChild(visitLink); 
