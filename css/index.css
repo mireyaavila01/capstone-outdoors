@@ -11,3 +11,26 @@
     height: 100%; /* Ensure image fills its container */
     object-fit: cover; 
 }
+
+p img{
+    width: 300px;
+    height: 200px;
+    float: left;
+    margin-right: 20px;
+}
+
+.btn-olive-green{
+    background-color: olive;
+    border-color: olive;
+    color: white;
+}
+
+h1{
+    text-align: center;
+    color: rgba(96, 38, 17, 0.936);
+    
+}
+
+.intropara{
+    font-size: 20px;
+}
