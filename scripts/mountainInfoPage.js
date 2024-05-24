@@ -13,7 +13,7 @@ hideOrShowCard(false);
 
 
 }
-
+//create dropdown
 function addMountainDropdown(){
 
     mountainOptions.innerHTML = "";
@@ -23,6 +23,7 @@ function addMountainDropdown(){
     newOption.value = "";
     mountainOptions.appendChild(newOption);
 
+// Loop through the mountainsArray to populate the dropdown with mountain options
     for (let i = 0; i < mountainsArray.length; i++) {
         let option = mountainsArray[i].name;
         let newOption = document.createElement("option");
@@ -33,9 +34,10 @@ function addMountainDropdown(){
 }
 // getting the selected value from the dropdown
 function getSelectedMountain(){
+
     let selectedMountain = mountainOptions.value.trim().toLowerCase();
 
-
+  // Finds the mountain in the mountainsArray whose name matches the selected mountain value
     let mountain = mountainsArray.find(m => m.name.trim().toLowerCase() === selectedMountain);
 
     if(mountain){
@@ -52,7 +54,7 @@ function getSelectedMountain(){
     
 }
 
-// create a card to display the value's info
+// create a card to display the mountain's info
 function createMountainCard(mountain){
 
     let cardBodyDiv = document.createElement("div");
@@ -95,8 +97,10 @@ function createMountainCard(mountain){
 
 
 }
-
+//hides or shows the mountain card
 function hideOrShowCard(show){
+
+// uses a boolean value
     if (show) {
         mountainCard.style.display = "block";
     } else {

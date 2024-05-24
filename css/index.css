@@ -1,5 +1,7 @@
+
+/* gives the body a pattern background */
 body{
-    background-image: url('../images/backgroundimage.webp');
+    background-image: url('../images/backgroundimage.webp');   
     background-repeat: repeat;
 }
 

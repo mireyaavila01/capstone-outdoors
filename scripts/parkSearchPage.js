@@ -18,7 +18,7 @@ matchingParks.onchange = showSelectedPark;
 };
 
 function onSearchTypeDropdown(){
-// clears exsisting results and park card
+
    clearResults(matchingParks);
    parkCardRow.innerHTML = "" ;
 
@@ -49,11 +49,11 @@ else {
 
 }
 
-
+// creates dropdown for location or park type
 function populateDropdown(optionsArray){
     clearResults(locationOrParkType);  
     
-
+//loops through the array of options then creates a new <option> element
     for (let i = 0; i < optionsArray.length; i++) {
         let option = optionsArray[i];
         let newOption = document.createElement("option");
@@ -64,6 +64,7 @@ function populateDropdown(optionsArray){
 
 }
 
+//created dropdown of matching parks 
 function getMatchingOptionsDropdown(){
     // clears exsisting results and park card
     clearResults(matchingParks);
@@ -98,6 +99,7 @@ function addOptionsToDropdown(parks , dropdown){
 
     clearResults(dropdown);
 
+    //loops through the array of parks then creates a new <option> element
     for(let i = 0; i < parks.length; i++){
         let park = parks[i];
         let newOption = document.createElement("option");
@@ -111,6 +113,7 @@ function findParks(optionSelected, searchType){
 
     optionSelected = optionSelected.trim().toLowerCase();
 
+//checks the searchType and reeturns which parks match
     if(searchType === "type"){
         return nationalParksArray.filter(park => {
             let parkType = park.LocationName.toLowerCase();
@@ -132,6 +135,7 @@ function findParks(optionSelected, searchType){
 
 }
 
+
 function clearResults(dropdown){
     dropdown.innerHTML = "";
 
@@ -140,17 +144,18 @@ function clearResults(dropdown){
     newOption.value = "";
     dropdown.appendChild(newOption);
 }
+
 function showSelectedPark(){
     
+
     let selectedParkValue = matchingParks.value.trim().toLowerCase();
 
-
+ // Finds the park in the nationalParksArray whose LocationID matches the selected park value
     let selectedPark = nationalParksArray.find(park => park.LocationID.trim().toLowerCase() === selectedParkValue);
-
-
 
     if(selectedPark){
         parkCardRow.innerHTML = "";
+        // Generate a new park card using the parkInfoCard function
         let parkCard = parkInfoCard(selectedPark);
         parkCardRow.appendChild(parkCard);
    
@@ -161,6 +166,8 @@ function showSelectedPark(){
     }
     
 }
+
+//creates card from the selected park
 function parkInfoCard(park){
     
 
